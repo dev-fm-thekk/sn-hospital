@@ -5,7 +5,7 @@ export function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center bg-linear-to-br from-primary/5 via-background to-primary/5 overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center bg-linear-to-br from-primary/5 via-background to-primary/5 overflow-hidden md:pt-0 pt-8"
     >
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden">

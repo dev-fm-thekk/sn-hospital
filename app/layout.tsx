@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-
-import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { Geist, Geist_Mono, Geist as V0_Font_Geist, Geist_Mono as V0_Font_Geist_Mono, Source_Serif_4 as V0_Font_Source_Serif_4 } from 'next/font/google'
 import { Navbar } from '@/components/navbar'
+import { SectionProvider } from '@/context/SectionContext'
+import ClientLayout from '@/components/ClientLayout'
 
 // Initialize fonts
 const _geist = V0_Font_Geist({ subsets: ['latin'], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"] })
@@ -41,9 +41,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-transparent">
       <body className="font-sans antialiased bg-transparent text-foreground">
-        <Navbar />
-        {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   )

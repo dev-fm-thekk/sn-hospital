@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -12,8 +12,10 @@ import {
   Stethoscope,
   GraduationCap,
   Calendar,
-  ExternalLink
+  ExternalLink,
+  Clock
 } from 'lucide-react'
+import Image from 'next/image'
 
 const doctors = [
   {
@@ -186,78 +188,56 @@ export function DoctorsSection() {
                 style={getCardStyle(index)}
                 className="w-full h-full"
               >
-                <Card className="h-full border border-border/50 bg-card/80 backdrop-blur-xl shadow-2xl overflow-hidden rounded-3xl">
-                  <CardContent className="p-0 h-full flex flex-col">
+                <Card className="relative mx-auto w-full max-w-sm pt-0 rounded-xl overflow-hidden">
 
-                    {/* ── Header: gradient + avatar row ── */}
-                    <div className={`relative bg-gradient-to-br ${doctor.color} overflow-hidden flex-shrink-0`}>
-                      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_2px_2px,rgba(255,255,255,1)_1px,transparent_0)] bg-[size:24px_24px]" />
+                  {/* Cover Image */}
+                  <div className='p-3'>
+                    <div className="relative w-full h-48 rounded-4xl overflow-hidden">
+                      <Image
+                        src="/sky.jpeg"
+                        alt="Doctor"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  </div>
 
-                      {/* Top row: avatar + badges */}
-                      <div className="relative z-10 flex items-start justify-between p-6 pb-4">
-                        {/* Avatar */}
-                        <Avatar className="w-16 h-16 border-2 border-white/40 shadow-lg">
-                          <AvatarImage src={doctor.profileUrl} alt={doctor.name} />
-                          <AvatarFallback className="bg-white/20 text-white font-bold text-lg backdrop-blur-md">
-                            {doctor.initials}
-                          </AvatarFallback>
-                        </Avatar>
+                  <div className="absolute left-1/2 top-28 -translate-x-1/2 z-10">
 
-                        {/* Rating + availability */}
-                        <div className="flex flex-col items-end gap-2">
-                          <div className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-bold flex items-center gap-1">
-                            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                            {doctor.rating}
-                          </div>
-                          <div className="px-3 py-1 bg-black/20 backdrop-blur-md rounded-full text-white text-[10px] font-medium border border-white/10 uppercase tracking-widest">
-                            {doctor.availability}
-                          </div>
-                        </div>
-                      </div>
+                    <div className="relative flex items-center justify-center">
+                      {/* Avatar */}
+                      <Avatar className="w-32 h-32 border-4 border-white shadow-lg relative z-10">
+                        <AvatarImage src="https://github.com/shadcn.png" alt="doctor" />
+                      </Avatar>
 
-                      {/* Name + specialty */}
-                      <div className="relative z-10 px-6 pb-6">
-                        <h3 className="text-white text-2xl font-bold leading-tight">{doctor.name}</h3>
-                        <p className="text-white/80 font-medium tracking-wide text-sm mt-0.5">{doctor.specialty}</p>
-                      </div>
                     </div>
 
-                    {/* ── Body ── */}
-                    <div className="flex-1 p-6 space-y-5 overflow-hidden">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Experience</p>
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-primary flex-shrink-0" />
-                            <span className="text-sm font-semibold">{doctor.experience}</span>
-                          </div>
-                        </div>
-                        <div className="space-y-1">
-                          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Education</p>
-                          <div className="flex items-center gap-2">
-                            <GraduationCap className="w-4 h-4 text-primary flex-shrink-0" />
-                            <span className="text-sm font-semibold truncate" title={doctor.education}>
-                              {doctor.education.split(' ').slice(-2).join(' ')}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                  </div>
+                  {/* Content (IMPORTANT: padding-top to avoid overlap) */}
+                  <CardHeader className="text-center mt-2">
+                    <CardTitle className='text-xl'>{doctor.name}</CardTitle>
+                    <CardDescription className='text-md'>{doctor.description}</CardDescription>
+                    <div className="w-full flex items-center justify-between gap-2 px-3 py-3">
 
-                      <p className="text-sm leading-relaxed text-muted-foreground font-medium">
-                        {doctor.description}
-                      </p>
+                      <Button variant="outline" className="flex-1">
+                        {doctor.rating}
+                      </Button>
 
-                      <div className="flex items-center gap-3 pt-2">
-                        <Button className="flex-1 h-12 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
-                          Book Appointment
-                        </Button>
-                        <Button variant="outline" size="icon" className="h-12 w-12 rounded-xl hover:border-primary/50 transition-all">
-                          <ExternalLink className="w-5 h-5" />
-                        </Button>
-                      </div>
+                      <Button variant="outline" className="flex-1">
+                        {doctor.specialty}
+                      </Button>
+
+                      <Button variant="outline" className="flex-1">
+                        {doctor.experience}
+                      </Button>
+
                     </div>
-
-                  </CardContent>
+                    <Button variant={ doctor.availability === "Available Today" ? "secondary" : "destructive"}
+                     className='w-32 mx-auto'>{doctor.availability}</Button>
+                  </CardHeader>
+                  <CardFooter>
+                    <Button className="w-full">Book Appointment</Button>
+                  </CardFooter>
                 </Card>
               </div>
             ))}
@@ -288,13 +268,6 @@ export function DoctorsSection() {
           <Button variant="ghost" size="icon" onClick={nextDoctor} className="rounded-full">
             <ChevronRight className="w-5 h-5" />
           </Button>
-        </div>
-
-        {/* Progress text */}
-        <div className="mt-12 text-center">
-          <p className="text-xs font-bold text-muted-foreground tracking-widest uppercase">
-            <span className="text-primary">{String(currentIndex + 1).padStart(2, '0')}</span> / {String(doctors.length).padStart(2, '0')} Medical Partners
-          </p>
         </div>
       </div>
     </section>

@@ -39,7 +39,7 @@ export function HeroSection() {
               placeholder="Enter your phone number" 
               className="border-none bg-transparent h-12 focus-visible:ring-0 shadow-none text-base md:text-lg placeholder:text-muted-foreground w-full" 
             />
-            <Button type="submit" size="lg" className="w-full sm:w-auto rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 font-bold px-8 shadow-lg transition-transform hover:scale-105 active:scale-95">
+            <Button type="submit" size="lg" className="w-full sm:w-auto rounded-xl bg-primary text-primary-foreground font-bold px-8 shadow-lg">
               Get Started
             </Button>
           </div>

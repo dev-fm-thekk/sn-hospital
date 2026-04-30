@@ -12,7 +12,6 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* ===== 60% BASE (Horizon White - #F1F8FF) ===== */
   --background: 0.98 0.01 225;
   --foreground: 0.19 0.05 245;      /* #1E3A5F Deep Navy */
 

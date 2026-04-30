@@ -35,46 +35,52 @@ export function Navbar() {
 
   // ✅ Intersection Observer for active section
   // ✅ Intersection Observer for active section
-useEffect(() => {
-  const sections = navItems
-    .map((item) => document.getElementById(item.id))
-    .filter(Boolean) as HTMLElement[]
+  useEffect(() => {
+    const sections = navItems
+      .map((item) => document.getElementById(item.id))
+      .filter(Boolean) as HTMLElement[]
 
-  if (!sections.length) return
+    if (!sections.length) return
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        // We only care about sections entering or occupying the top 20% of the screen
-        if (entry.isIntersecting) {
-          setCurrentSection(entry.target.id)
-        }
-      })
-    },
-    {
-      // rootMargin is key: 
-      // This creates a narrow "detection strip" at the top of the screen.
-      // Adjusting the bottom margin to -80% ensures only one section can be 'active' at a time.
-      rootMargin: '-80px 0px -80% 0px', 
-      threshold: 0,
-    }
-  )
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // We only care about sections entering or occupying the top 20% of the screen
+          if (entry.isIntersecting) {
+            setCurrentSection(entry.target.id)
+          }
+        })
+      },
+      {
+        // rootMargin is key: 
+        // This creates a narrow "detection strip" at the top of the screen.
+        // Adjusting the bottom margin to -80% ensures only one section can be 'active' at a time.
+        rootMargin: '-80px 0px -80% 0px',
+        threshold: 0,
+      }
+    )
 
-  sections.forEach((section) => observer.observe(section))
+    sections.forEach((section) => observer.observe(section))
 
-  return () => observer.disconnect()
-}, [setCurrentSection, navItems]) // Add navItems to deps for safety
+    return () => observer.disconnect()
+  }, [setCurrentSection, navItems]) // Add navItems to deps for safety
 
   // ✅ Scroll to section
   const scrollToSection = (sectionId: string) => {
-    setCurrentSection(sectionId)
-
     const element = document.getElementById(sectionId)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+      const offset = 80 // Height of your navbar
+      const bodyRect = document.body.getBoundingClientRect().top
+      const elementRect = element.getBoundingClientRect().top
+      const elementPosition = elementRect - bodyRect
+      const offsetPosition = elementPosition - offset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
     }
   }
-
   return (
     <nav className="fixed top-0 left-0 w-full z-50 py-4 md:py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">

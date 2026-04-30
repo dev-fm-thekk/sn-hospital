@@ -34,7 +34,8 @@ export function Navbar() {
   }, [])
 
   // ✅ Intersection Observer for active section
-  useEffect(() => {
+  // ✅ Intersection Observer for active section
+useEffect(() => {
   const sections = navItems
     .map((item) => document.getElementById(item.id))
     .filter(Boolean) as HTMLElement[]
@@ -43,30 +44,26 @@ export function Navbar() {
 
   const observer = new IntersectionObserver(
     (entries) => {
-      let visibleSection = currentSection
-      let maxRatio = 0
-
       entries.forEach((entry) => {
-        if (entry.intersectionRatio > maxRatio) {
-          maxRatio = entry.intersectionRatio
-          visibleSection = entry.target.id
+        // We only care about sections entering or occupying the top 20% of the screen
+        if (entry.isIntersecting) {
+          setCurrentSection(entry.target.id)
         }
       })
-
-      if (visibleSection) {
-        setCurrentSection(visibleSection)
-      }
     },
     {
-      threshold: [0.1, 0.25, 0.5, 0.75, 1],
-      rootMargin: '-10% 0px -30% 0px', // 👈 helps bottom sections like "doctors"
+      // rootMargin is key: 
+      // This creates a narrow "detection strip" at the top of the screen.
+      // Adjusting the bottom margin to -80% ensures only one section can be 'active' at a time.
+      rootMargin: '-80px 0px -80% 0px', 
+      threshold: 0,
     }
   )
 
   sections.forEach((section) => observer.observe(section))
 
   return () => observer.disconnect()
-}, [setCurrentSection])
+}, [setCurrentSection, navItems]) // Add navItems to deps for safety
 
   // ✅ Scroll to section
   const scrollToSection = (sectionId: string) => {
